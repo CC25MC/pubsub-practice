@@ -15,6 +15,11 @@ export const message = async (payload) => {
 	return res.data;
 };
 
+export const cancel = async (payload) => {
+	const res = await request.post("/api/pubsub/cancel", payload);
+	return res.data;
+};
+
 export const publish = async (payload) => {
 	const res = await request.post("/api/pubsub/publish", payload);
 	return res.data;

@@ -58,6 +58,23 @@ const subscribe = async (req, res) => {
     }
 }
 
+const cancelSubscription = async (req, res) => {
+    const { subscriptionName } = req.body;
+    if (subscriptionName) {
+        try {
+            await pubSubClient.subscription(subscriptionName).delete();
+            res.status(201).send({
+                msg: "Subscripcion eliminada correctamente"
+            });
+        } catch (error) {
+            console.log(error.message);
+            res.status(404).send({
+                msg: "No se pudo eliminar la subscripcion porque falto el tema || la subscripcion"
+            });
+        }
+    }
+}
+
 const getMessage = async (req, res) => {
     // References an existing subscription
     const { subscriptionName } = req.body;
@@ -105,5 +122,6 @@ module.exports = {
     getTopic,
     publish,
     subscribe,
-    getMessage
+    getMessage,
+    cancelSubscription
 };

@@ -6,6 +6,9 @@ export const useGetTopics = () => {
     const { isLoading, data, error } = useQuery(
         "/api/pubsub",
         () => request.pubsub.getTopic(),
+        {
+            refetchInterval: 60000
+        }
     );
     return {
         isLoading,
@@ -37,8 +40,31 @@ export const useGetMessage = () => {
         getMessage,
         error,
     };
-
 }
+
+export const useCancel = () => {
+    const { enqueueSnackbar } = useSnackbar();
+    const {
+        mutate: cancelS,
+        isLoading,
+        error,
+    } = useMutation(
+        (payload) => request.pubsub.cancel(payload),
+        {
+            onSuccess: data => {
+                if (data.msg) {
+                    enqueueSnackbar("Eliminacion exitosa", { variant: 'success' });
+                }
+            }
+        }
+    );
+    return {
+        isLoading,
+        cancelS,
+        error,
+    };
+}
+
 
 export const useCreateTopic = () => {
     const { enqueueSnackbar } = useSnackbar();
@@ -59,6 +85,29 @@ export const useCreateTopic = () => {
     return {
         isLoading,
         createT,
+        error,
+    };
+}
+
+export const usePublish = () => {
+    const { enqueueSnackbar } = useSnackbar();
+    const {
+        mutate: createP,
+        isLoading,
+        error,
+    } = useMutation(
+        (payload) => request.pubsub.publish(payload),
+        {
+            onSuccess: data => {
+                if (data.msg) {
+                    enqueueSnackbar(data.msg, { variant: 'success' });
+                }
+            }
+        }
+    );
+    return {
+        isLoading,
+        createP,
         error,
     };
 }

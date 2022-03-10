@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const { validateFields } = require('../middlewares');
 
-const { createTopic, getTopic, publish, subscribe, getMessage } = require('../controllers/pubsub');
+const { createTopic, getTopic, publish, subscribe, getMessage, cancelSubscription } = require('../controllers/pubsub');
 
 const router = Router();
 
@@ -21,5 +21,6 @@ router.post('/subscribe', [
 ], subscribe);
 
 router.post('/message', getMessage);
+router.post('/cancel', cancelSubscription);
 
 module.exports = router;

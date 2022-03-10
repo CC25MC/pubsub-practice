@@ -17,14 +17,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CachedIcon from '@mui/icons-material/Cached';
 import ButtonGroup from '@mui/material/ButtonGroup';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const View = (props) => {
     const { topico, contenido, tema, saveData, handleChange, user, topics, isLoading,
-        message, isLoadingMessage, refresData } = props;
+        message, isLoadingMessage, refresData, isLoadingPublish,
+        isLoadingTopic, cancelSubscription } = props;
     const [open, setOpen] = useState(false);
     const [pass, setPass] = useState(false);
     const handleClickOpen = () => {
@@ -52,6 +53,9 @@ const View = (props) => {
         <ResponsiveAppBar />
         <Typography variant="h6" sx={{ textAlign: "center", marginTop: 1 }} gutterBottom component="div">
             Temas
+            <IconButton color="primary" onClick={() => cancelSubscription()} component="span">
+                <DeleteIcon />
+            </IconButton>
         </Typography>
         <Grid container sx={{ justifyContent: "center" }} >
             {topics.map((t, key) => (
@@ -139,8 +143,14 @@ const View = (props) => {
 
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" onClick={handleClose}>Cerrar</Button>
-                <Button variant="contained" onClick={saveData}>Crear</Button>
+                <Button variant="outlined" disabled={isLoadingPublish || isLoadingTopic} onClick={handleClose}>Cerrar</Button>
+                <Button variant="contained" disabled={isLoadingPublish || isLoadingTopic} onClick={() => saveData(pass)}>
+                    {isLoadingPublish || isLoadingTopic ?
+                        <CircularProgress />
+                        :
+                        "Crear"
+                    }
+                </Button>
             </DialogActions>
         </Dialog>
 
