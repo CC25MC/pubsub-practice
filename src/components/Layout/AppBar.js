@@ -10,12 +10,12 @@ import Container from '@mui/material/Container';
 // import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 // import MenuItem from '@mui/material/MenuItem';
-// import { useAuth } from '../../hooks';
+import { useAuth } from '../../hooks';
 import LogoutIcon from '@mui/icons-material/Logout';
 // const pages = ['Tickets', 'Usuarios', 'Licencias'];
 
 export const ResponsiveAppBar = () => {
-  // const { user } = useAuth();
+  const { logOut } = useAuth();
   // const { setPath } = useLocation();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -26,6 +26,7 @@ export const ResponsiveAppBar = () => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
+    logOut();
     setAnchorElUser(event.currentTarget);
   };
 

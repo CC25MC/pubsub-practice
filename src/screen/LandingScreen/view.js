@@ -18,15 +18,18 @@ const View = () => {
         <Box sx={{
             width: "100%",
             height: "100vh",
-            background: "linear-gradient(180deg, rgba(255,255,255,.2) 39%, rgba(51,56,57,1) 96%) center center / 100% 100% no-repeat",
+            background: "linear-gradient(180deg, rgba(196, 196, 196, 0) 0%, #000000 100%)",
         }}>
             <Box sx={{
+                width: "100%",
+                height: "100%",
+                position: "absolute",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                paddingTop: "35%"
+                flexDirection: 'column',
             }}>
-                <Stack spacing={2} direction="row">
+                <Stack  spacing={2} direction="row">
                     <Link href="/login">
                         <Button sx={{ width: "150px" }} variant="contained">Login</Button>
                     </Link>

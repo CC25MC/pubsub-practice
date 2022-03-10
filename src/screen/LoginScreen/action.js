@@ -1,13 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLogin, useRegister } from "../../hooks"
+import { useSnackbar } from 'notistack';
 
 const dataValues = {
     correo: "",
     password: "",
+    name:""
 }
 
 const Action = () => {
+    const { errorSigningIn, isLoadingSigningIn, signIn } = useLogin();
+    const { isLoading, error, signUp } = useRegister();
     const [values, setValues] = useState(dataValues);
-    const { correo, password } = values;
+    const { correo, password, name } = values;
+    const { enqueueSnackbar } = useSnackbar();
+
+    useEffect(() => {
+        if (error) {
+            enqueueSnackbar(error?.response.data.msg, { variant: 'error' });
+        }
+    }, [error]);
+
+    useEffect(() => {
+        if (errorSigningIn) {
+            enqueueSnackbar(errorSigningIn?.response.data.msg, { variant: 'error' });
+        }
+    }, [errorSigningIn]);
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -16,14 +34,17 @@ const Action = () => {
         });
     };
 
-    const handleLogin = (pass) =>{
-        pass ? console.log("Registrate",correo,password) : console.log("Login",correo,password);
+    const handleLogin = (pass) => {
+        pass ? signUp({ email: correo, password: password, role: "USER_ROLE", name: name }) : signIn({ email: correo, password: password });
     }
     return {
         correo,
+        name,
         password,
         handleChange,
-        handleLogin
+        handleLogin,
+        isLoadingSigningIn,
+        isLoading
     }
 }
 

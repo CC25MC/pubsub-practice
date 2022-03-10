@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth, useGetTopics, useGetMessage } from "../../hooks"
+import { useSnackbar } from 'notistack';
 
 const dataValues = {
     topico: "",
@@ -7,8 +9,17 @@ const dataValues = {
 }
 
 const Action = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [values, setValues] = useState(dataValues);
+    const { user } = useAuth();
+    const { data: topics, isLoading } = useGetTopics();
+    const { data: message, isLoading: isLoadingMessage, getMessage, error: errorMessage } = useGetMessage();
     const { topico, contenido, tema } = values;
+
+    useEffect(() => {
+        if (errorMessage)
+            enqueueSnackbar(errorMessage?.response.data.msg, { variant: 'error' });
+    }, [errorMessage]);
 
     const handleChange = (prop) => (event) => {
         setValues({
@@ -18,12 +29,19 @@ const Action = () => {
     };
 
     const saveData = () => {
-        console.log(topico, contenido, tema);
+    }
+    const refresData = () => {
+        getMessage({ subscriptionName: user?.name });
     }
     return {
-        topico, contenido, tema,
+        topico, contenido, tema, user,
+        topics,
+        message,
+        isLoadingMessage,
+        isLoading,
         handleChange,
-        saveData
+        saveData,
+        refresData
     }
 }
 
